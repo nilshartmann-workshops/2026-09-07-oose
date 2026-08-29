@@ -1,3 +1,5 @@
+import { Suspense } from "react";
+
 import PlantForm from "./plant-form/PlantForm.tsx";
 import PlantList from "./plant-list/PlantList.tsx";
 import { Panel, Tab, TabBar } from "./shared/TabBar.tsx";
@@ -18,7 +20,9 @@ export default function App() {
         <Tab tabId={"beet"}>Compiler (Spielwiese)</Tab>
 
         <Panel tabId={"list"}>
-          <PlantList />
+          <Suspense fallback={<p>Pflanzen werden geladen ...</p>}>
+            <PlantList />
+          </Suspense>
         </Panel>
         <Panel tabId={"form"}>
           <PlantForm />

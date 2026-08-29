@@ -5,7 +5,10 @@ import react from "@vitejs/plugin-react";
 import { playwright } from "@vitest/browser-playwright";
 import { defineConfig } from "vite";
 
-const enableReactCompiler = false;
+// 🔎 Zeigen: Kind B auf der Spielwiese rendert jetzt nicht mehr mit, und das
+//    useCallback vor dem Memo-Kind ist entbehrlich geworden. Zum Vergleich
+//    auf false stellen und den Devserver neu starten.
+const enableReactCompiler = true;
 
 const reactPluginOptions = enableReactCompiler
   ? { babel: { plugins: ["babel-plugin-react-compiler"] } }

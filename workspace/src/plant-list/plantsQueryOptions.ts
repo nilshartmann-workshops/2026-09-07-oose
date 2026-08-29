@@ -1,6 +1,7 @@
 import { queryOptions } from "@tanstack/react-query";
 import { z } from "zod";
 
+import { HttpError } from "../shared/HttpError.ts";
 import { PlantSchema } from "../types.ts";
 
 export const plantsQueryOptions = () => {
@@ -13,7 +14,7 @@ export const plantsQueryOptions = () => {
       //    ganz normal an. Ohne diese Zeile ginge die Fehlerseite an zod, und
       //    die Meldung spräche von einem falschen Feld statt vom Backend.
       if (!response.ok) {
-        throw new Error(`Loading plants failed with HTTP ${response.status}`);
+        throw new HttpError(response.status, response.statusText);
       }
 
       const data = await response.json();

@@ -7,7 +7,7 @@ type FavoritePlantListProps = {
 };
 
 export default function FavoritePlantList({ plants }: FavoritePlantListProps) {
-  const { favoriteIds } = useFavoritesStore();
+  const favoriteIds = useFavoritesStore((state) => state.favoriteIds);
 
   const favoritePlants = plants.filter((p) => favoriteIds.includes(p.id));
 

@@ -18,10 +18,11 @@ export default function PlantCard({
   wateringInterval,
   lastWatered,
 }: PlantCardProps) {
-  // 🔎 Erzählen: fürs Erste bequem, der komplette Store
-  const { favoriteIds, toggleFavorite } = useFavoritesStore();
-
-  const isFavorite = favoriteIds.includes(id);
+  // 🔎 Erzählen: zwei Selektoren statt eines Zugriffs auf den ganzen Store
+  const isFavorite = useFavoritesStore((state) =>
+    state.favoriteIds.includes(id),
+  );
+  const toggleFavorite = useFavoritesStore((state) => state.toggleFavorite);
 
   const wateringInfo =
     wateringInterval === 1

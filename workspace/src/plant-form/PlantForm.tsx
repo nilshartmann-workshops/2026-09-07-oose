@@ -1,7 +1,7 @@
 import { DevTool } from "@hookform/devtools";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRef } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { Control, Controller, useForm, useWatch } from "react-hook-form";
 import { z } from "zod";
 
 import IntervalSelector from "./IntervalSelector.tsx";
@@ -103,11 +103,48 @@ export default function PlantForm() {
         />
       </div>
 
+      <PlantPreview control={form.control} />
+
       <div className={"FormButtons"}>
+        {/* 🔎 Zeigen: shouldValidate an setValue hängen, dann verschwindet eine
+            Fehlermeldung sofort statt erst beim nächsten Abschicken. */}
+        <button
+          type={"button"}
+          className={"secondary"}
+          onClick={() => {
+            form.setValue("name", "Grüne Monstera");
+            form.setValue("location", "Wohnzimmer");
+          }}
+        >
+          Beispiel ausfüllen
+        </button>
         <button type={"submit"} className={"primary"}>
           Pflanze hinzufügen 🌱
         </button>
       </div>
     </form>
+  );
+}
+
+type PlantPreviewProps = {
+  control: Control<NewPlantFormState>;
+};
+
+function PlantPreview({ control }: PlantPreviewProps) {
+  // 🔎 Zeigen: erst form.watch() oben im Formular und die Werte direkt dort
+  //    anzeigen. Der Zähler des Formulars läuft dann bei jedem Zeichen mit.
+  // 🔎 Erzählen: useWatch abonniert die Felder in dieser Komponente. Nur sie
+  //    rendert neu, das Formular darüber bleibt stehen.
+  const [name, location, wateringInterval] = useWatch({
+    control,
+    name: ["name", "location", "wateringInterval"],
+  });
+
+  return (
+    <div className={"space-y-1 rounded-lg bg-green-50 p-4 text-sm"}>
+      <div>Name: {name || "noch offen"}</div>
+      <div>Standort: {location || "noch offen"}</div>
+      <div>Gießen: alle {wateringInterval} Tage</div>
+    </div>
   );
 }

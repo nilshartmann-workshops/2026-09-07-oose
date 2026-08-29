@@ -1,0 +1,488 @@
+@import "tailwindcss";
+
+@theme inline {
+  --font-space: "Space Grotesk", var(--font-sans);
+  --font-inter: "inter", var(--font-sans);
+  --font-poppins: "barlow", var(--font-sans);
+  --font-caveat: "Caveat", var(--font-serif);
+}
+
+@layer base {
+  form {
+    @apply space-y-6 rounded-lg bg-white p-8 shadow-lg;
+  }
+
+  label {
+    @apply block text-sm font-semibold text-gray-700;
+  }
+
+  input {
+    @apply w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-green-500 focus:outline-none;
+  }
+
+  input[type="checkbox"] {
+    @apply h-4 w-4 accent-green-600;
+  }
+
+  select {
+    @apply w-full rounded-lg border border-gray-300 bg-white px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-green-500 focus:outline-none;
+  }
+
+  button {
+    @apply cursor-pointer;
+  }
+
+  a {
+    @apply inline-block rounded-lg bg-green-600 px-4 py-2 font-semibold text-white shadow-md transition-colors duration-200 hover:bg-green-700 hover:shadow-lg;
+  }
+}
+
+@layer components {
+  #root {
+    @apply flex min-h-screen items-start justify-center gap-y-8 bg-green-50;
+  }
+
+  .AppContainer {
+    @apply container mx-auto max-w-7xl px-4 py-8;
+  }
+
+  .AppLayout {
+    @apply container mx-auto flex max-w-7xl flex-col items-center justify-start gap-y-4 px-4 py-8;
+  }
+
+  .AppHeader {
+    @apply bg-green-600 p-6 text-white shadow-lg;
+  }
+
+  .PlantList {
+    @apply flex items-start justify-between gap-x-4;
+  }
+
+  .PlantList h2 {
+    @apply pb-2 text-2xl font-bold;
+  }
+
+  .PlantCard {
+    @apply w-[30rem] cursor-pointer rounded-lg border-l-4 border-green-400 bg-white p-6 shadow-md transition-shadow duration-200 hover:shadow-lg;
+  }
+
+  .PlantCard header {
+    @apply mb-4 flex items-center justify-between;
+  }
+
+  .PlantCard header h2 {
+    @apply text-base font-semibold text-gray-800;
+  }
+
+  .PlantCard section {
+    @apply space-y-2 text-sm text-gray-500;
+  }
+
+  .PlantCard button {
+    @apply rounded-lg border border-gray-200 px-2 py-1 hover:bg-green-100;
+  }
+
+  .PlantCardList {
+    @apply flex flex-col gap-y-8;
+  }
+
+  .TabBar {
+    @apply mb-6 border-b border-gray-200;
+  }
+
+  .Tab {
+    @apply mr-2 -mb-px rounded-t-lg border border-gray-200 border-b-white bg-green-50 px-4 py-2 text-sm font-semibold text-gray-600 transition-colors hover:bg-green-100 hover:text-green-700;
+  }
+
+  .Tab:disabled {
+    @apply cursor-default bg-white text-green-700;
+  }
+
+  .TabPanel {
+    @apply rounded-b-lg bg-white p-6 shadow-md;
+  }
+
+  .RenderCounter {
+    @apply inline-block rounded-lg bg-gray-100 px-2 py-1 font-mono text-sm text-gray-700;
+  }
+
+  .FormControl {
+    @apply space-y-2;
+  }
+
+  input.error,
+  select.error {
+    @apply border-red-500 focus:ring-red-500;
+  }
+
+  .error-message {
+    @apply text-sm font-medium text-red-600;
+  }
+
+  .success-message {
+    @apply w-full rounded-lg border border-green-500 p-2 font-medium text-green-700;
+  }
+
+  button.sm {
+    @apply rounded-lg px-1 py-1 text-sm text-gray-800 underline decoration-gray-300 transition-colors duration-200 hover:decoration-gray-800;
+  }
+
+  button.primary {
+    @apply rounded-lg bg-green-600 px-4 py-2 font-semibold text-white shadow-md transition-colors duration-200 hover:bg-green-700 hover:shadow-lg;
+  }
+
+  button.secondary {
+    @apply rounded-lg border-1 border-gray-200 bg-gray-100 px-4 py-2 font-semibold text-gray-800 transition-colors duration-200 hover:bg-gray-300;
+  }
+
+  .FormButtons {
+    @apply flex justify-end gap-4 border-t border-gray-200 pt-6;
+  }
+
+  .ButtonBar {
+    @apply flex gap-x-2;
+  }
+
+  /* Die Links der Leiste stehen hier als eigene Regeln und nicht in
+     Utility-Klassen an der Komponente: Die Regel für 'a' weiter oben trifft
+     jeden Link, und hier steht, was für diese Leiste davon abweicht. */
+  .PlantOrderBar {
+    @apply mb-6 flex items-center gap-x-2 text-sm text-gray-500;
+  }
+
+  .PlantOrderBar a {
+    @apply bg-white px-3 py-1 text-sm font-medium text-green-700 shadow-none ring-1 ring-green-300 hover:bg-green-100;
+  }
+
+  .PlantOrderBar a.active {
+    @apply bg-green-600 text-white ring-green-600;
+  }
+
+  .NewPlantPage header {
+    @apply mb-4 flex items-center justify-between;
+  }
+
+  .NewPlantPage header h1 {
+    @apply text-2xl font-bold text-green-800;
+  }
+
+  .CardListFallback {
+    @apply w-[30rem] animate-pulse rounded-lg border-l-4 border-b-green-50 bg-white p-6 shadow-md transition-shadow duration-200;
+  }
+
+  .app-title {
+    @apply text-center text-3xl font-bold;
+  }
+
+  .app-main {
+    @apply container mx-auto max-w-7xl px-4 py-8;
+  }
+
+  /* Button Styles */
+  .btn-primary {
+    @apply rounded-lg bg-green-600 px-4 py-2 font-semibold text-white shadow-md transition-colors duration-200 hover:bg-green-700 hover:shadow-lg;
+  }
+
+  .btn-secondary {
+    @apply rounded-lg bg-gray-200 px-4 py-2 font-semibold text-gray-800 transition-colors duration-200 hover:bg-gray-300;
+  }
+
+  /* Plant List Styles */
+  .plant-list-container {
+    @apply space-y-6;
+  }
+
+  .list-header {
+    @apply flex items-center justify-between;
+  }
+
+  .list-title {
+    @apply text-2xl font-bold text-green-800;
+  }
+
+  .sort-controls {
+    @apply rounded-lg bg-white p-4 shadow-md;
+  }
+
+  .sort-label {
+    @apply mr-4 font-medium text-gray-700;
+  }
+
+  .sort-buttons {
+    @apply inline-flex flex-wrap gap-2;
+  }
+
+  .sort-btn {
+    @apply rounded-md border border-green-300 px-3 py-1 text-sm font-medium text-green-700 transition-colors duration-200 hover:bg-green-100;
+  }
+
+  .sort-btn.active {
+    @apply border-green-600 bg-green-600 text-white;
+  }
+
+  /* Plant Table Styles */
+  .plant-table-container {
+    @apply overflow-hidden overflow-x-auto rounded-lg bg-white shadow-md;
+  }
+
+  .plant-table {
+    @apply w-full min-w-max;
+  }
+
+  .table-header {
+    @apply bg-green-600 px-4 py-3 text-left text-sm font-semibold tracking-wider text-white uppercase;
+  }
+
+  .table-row {
+    @apply border-b border-gray-200 transition-colors duration-200 hover:bg-gray-50;
+  }
+
+  /* Verschiedene Zeilen-Hintergründe basierend auf Gießstatus */
+  .table-row.status-overdue {
+    @apply border-l-4 border-red-500 bg-red-50 hover:bg-red-100;
+  }
+
+  .table-row.status-today {
+    @apply border-l-4 border-orange-500 bg-orange-50 hover:bg-orange-100;
+  }
+
+  .table-row.status-soon {
+    @apply border-l-4 border-yellow-500 bg-yellow-50 hover:bg-yellow-100;
+  }
+
+  .table-row.status-good {
+    @apply border-l-4 border-green-500 bg-green-50 hover:bg-green-100;
+  }
+
+  .table-cell {
+    @apply px-4 py-3 whitespace-nowrap;
+  }
+
+  .plant-name-cell {
+    @apply flex items-center gap-2;
+  }
+
+  .plant-name {
+    @apply text-base font-semibold text-gray-800;
+  }
+
+  .watering-alert {
+    @apply text-lg;
+  }
+
+  .plant-location {
+    @apply text-sm text-gray-600;
+  }
+
+  /* Status Badge Styles - Vier verschiedene Gießstatus */
+  .status-badge {
+    @apply inline-flex items-center rounded-full px-3 py-1 text-sm font-medium;
+  }
+
+  .status-overdue {
+    @apply bg-red-100 font-semibold text-red-800;
+  }
+
+  .status-today {
+    @apply bg-orange-100 font-semibold text-orange-800;
+  }
+
+  .status-soon {
+    @apply bg-yellow-100 font-medium text-yellow-800;
+  }
+
+  .status-good {
+    @apply bg-green-100 text-green-800;
+  }
+
+  .btn-table-action {
+    @apply rounded-md bg-green-100 px-3 py-1 text-sm font-medium text-green-800 transition-colors duration-200 hover:bg-green-200;
+  }
+
+  /* Gießstatus-Zelle */
+  .watering-status-cell {
+    @apply space-y-1;
+  }
+
+  .status-detail {
+    @apply block text-xs text-gray-500;
+  }
+
+  /* Status-Legende */
+  .status-legend {
+    @apply rounded-lg bg-white p-6 shadow-md;
+  }
+
+  .legend-title {
+    @apply mb-4 text-lg font-semibold text-gray-800;
+  }
+
+  .legend-items {
+    @apply grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4;
+  }
+
+  .legend-item {
+    @apply flex flex-col items-center space-y-2 text-center;
+  }
+
+  .legend-text {
+    @apply text-sm text-gray-600;
+  }
+
+  /* Plant Detail Styles */
+  .plant-detail-container {
+    @apply space-y-6;
+  }
+
+  .detail-header {
+    @apply flex items-center justify-between;
+  }
+
+  .plant-detail-card {
+    @apply rounded-lg bg-white p-8 shadow-lg;
+  }
+
+  .detail-title-section {
+    @apply mb-8 flex items-center justify-between border-b border-gray-200 pb-4;
+  }
+
+  .detail-title {
+    @apply text-3xl font-bold text-green-800;
+  }
+
+  .watering-alert-large {
+    @apply rounded-lg bg-orange-100 px-3 py-1 text-2xl font-semibold text-orange-600;
+  }
+
+  .detail-grid {
+    @apply mb-8 grid grid-cols-1 gap-6 md:grid-cols-2;
+  }
+
+  .detail-section {
+    @apply space-y-2;
+  }
+
+  .section-title {
+    @apply text-lg font-semibold text-gray-700;
+  }
+
+  .section-content {
+    @apply text-lg text-gray-600;
+  }
+
+  .section-content.overdue {
+    @apply font-semibold text-orange-600;
+  }
+
+  .watering-status-section {
+    @apply mb-8;
+  }
+
+  .status-card {
+    @apply rounded-lg border border-green-200 bg-green-50 p-6;
+  }
+
+  .status-card.overdue {
+    @apply border-orange-200 bg-orange-50;
+  }
+
+  .status-card h3 {
+    @apply mb-2 text-lg font-semibold text-green-800;
+  }
+
+  .status-card.overdue h3 {
+    @apply text-orange-800;
+  }
+
+  .status-card p {
+    @apply text-green-700;
+  }
+
+  .status-card.overdue p {
+    @apply text-orange-700;
+  }
+
+  .notes-section {
+    @apply border-t border-gray-200 pt-6;
+  }
+
+  .notes-content {
+    @apply rounded-lg bg-gray-50 p-4 text-gray-600 italic;
+  }
+
+  /* Form Styles */
+  .plant-form-container {
+    @apply space-y-6;
+  }
+
+  .form-header {
+    @apply flex items-center justify-between;
+  }
+
+  .form-title {
+    @apply text-2xl font-bold text-green-800;
+  }
+
+  .plant- .form-row {
+    @apply grid grid-cols-1 gap-4 md:grid-cols-2;
+  }
+
+  .form-group {
+    @apply space-y-2;
+  }
+
+  .form- .form- .form- .form-textarea {
+    @apply w-full resize-y rounded-lg border border-gray-300 px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-green-500 focus:outline-none;
+  }
+
+  .form-input.error,
+  .form-select.error {
+    @apply border-red-500 focus:ring-red-500;
+  }
+
+  .error-message {
+    @apply text-sm font-medium text-red-600;
+  }
+
+  .form-actions {
+    @apply flex justify-end gap-4 border-t border-gray-200 pt-6;
+  }
+
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .app-main {
+      @apply px-2;
+    }
+
+    .sort-buttons {
+      @apply flex-col;
+    }
+
+    .detail-grid {
+      @apply grid-cols-1;
+    }
+
+    .form-actions {
+      @apply flex-col;
+    }
+
+    .detail-title-section {
+      @apply flex-col items-start gap-4;
+    }
+
+    .form-row {
+      @apply grid-cols-1;
+    }
+
+    .legend-items {
+      @apply grid-cols-1;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .table-header:nth-child(n + 4):nth-child(-n + 6),
+    .table-cell:nth-child(n + 4):nth-child(-n + 6) {
+      @apply hidden;
+    }
+  }
+}

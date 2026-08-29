@@ -1,0 +1,31 @@
+GET http://localhost:7200/api/plants
+
+###
+
+GET http://localhost:7200/api/plants/1
+
+###
+
+GET http://localhost:7200/api/plants/404
+
+###
+
+POST http://localhost:7200/api/plants
+content-type: application/json
+
+{
+  "name": "Rosi Rose",
+  "wateringInterval": 4,
+  "location": "Wohnzimmer",
+  "lastWatered": "2025-12-24",
+  "notes": "Blüten schneiden!"
+}
+
+###
+
+PUT http://localhost:7200/api/plants/1/lastWatered
+content-type: application/json
+
+{
+  "lastWatered": "2025-06-30"
+}

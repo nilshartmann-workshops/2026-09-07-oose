@@ -3,6 +3,7 @@ import { Suspense } from "react";
 import PlantForm from "./plant-form/PlantForm.tsx";
 import PlantErrorBoundary from "./plant-list/PlantErrorBoundary.tsx";
 import PlantList from "./plant-list/PlantList.tsx";
+import PlantOrderBar from "./plant-list/PlantOrderBar.tsx";
 import { Panel, Tab, TabBar } from "./shared/TabBar.tsx";
 import BeetSpielwiese from "./spielwiese/BeetSpielwiese.tsx";
 import EffektSpielwiese from "./spielwiese/EffektSpielwiese.tsx";
@@ -21,6 +22,9 @@ export default function App() {
         <Tab tabId={"beet"}>Compiler (Spielwiese)</Tab>
 
         <Panel tabId={"list"}>
+          {/* 🔎 Erzählen: die Leiste steht außerhalb der Boundary, damit sie
+              auch dann bedienbar bleibt, wenn das Laden scheitert. */}
+          <PlantOrderBar />
           <PlantErrorBoundary>
             <Suspense fallback={<p>Pflanzen werden geladen ...</p>}>
               <PlantList />

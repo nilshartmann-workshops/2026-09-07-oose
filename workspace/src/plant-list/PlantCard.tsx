@@ -3,7 +3,6 @@ import { Link } from "@tanstack/react-router";
 import dayjs from "dayjs";
 
 import { getDaysUntilWatering } from "../shared/date-utils.ts";
-import { plantsQueryOptions } from "./plantsQueryOptions.ts";
 import { useFavoritesStore } from "./useFavoritesStore.ts";
 
 type PlantCardProps = {
@@ -54,8 +53,11 @@ export default function PlantCard({
     //
     // 🔎 Nebenbei: jedes Callback bekommt den QueryClient auch im letzten
     //    Parameter gereicht (context.client). Dann entfällt useQueryClient.
+    //
+    // 🔎 Erzählen: hier steht jetzt der grobe Schlüssel und nicht der der
+    //    Liste. Er trifft jede Sortierung im Cache und die Detailseite dazu.
     onSuccess() {
-      queryClient.invalidateQueries(plantsQueryOptions());
+      queryClient.invalidateQueries({ queryKey: ["plants"] });
     },
   });
 

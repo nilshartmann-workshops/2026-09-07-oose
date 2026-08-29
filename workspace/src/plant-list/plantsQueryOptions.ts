@@ -4,11 +4,18 @@ import { z } from "zod";
 import { HttpError } from "../shared/HttpError.ts";
 import { PlantSchema } from "../types.ts";
 
-export const plantsQueryOptions = () => {
+// 🔎 Erzählen: die erlaubten Werte stehen hier als Union und in der Route als
+//    zod-Enum. Beide folgen dem Backend und nicht einander, deshalb teilen sie
+//    sich keinen Typ.
+export const plantsQueryOptions = (orderBy: "id" | "lastWatered") => {
   return queryOptions({
-    queryKey: ["plants"],
+    // 🔎 Zeigen: orderBy weglassen, dann bleibt die alte Sortierung im Cache
+    //    stehen und die Liste ändert sich beim Umschalten nicht.
+    queryKey: ["plants", { orderBy }],
     queryFn: async () => {
-      const response = await fetch("http://localhost:7200/api/plants");
+      const response = await fetch(
+        `http://localhost:7200/api/plants?orderBy=${orderBy}`,
+      );
 
       // 🔎 Erzählen: fetch löst bei 404 oder 500 nichts aus, die Antwort kommt
       //    ganz normal an. Ohne diese Zeile ginge die Fehlerseite an zod, und

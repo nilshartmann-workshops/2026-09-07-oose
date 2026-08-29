@@ -10,6 +10,10 @@ export const plantManagerRouter = createRouter({
   context: {
     queryClient,
   },
+
+  // 🔎 Zeigen: im Netzwerk-Tab geht die Anfrage schon beim Überfahren des
+  //    Links raus, nicht erst beim Klick.
+  defaultPreload: "intent",
 });
 
 // Erst diese Deklaration verbindet den Typ des Routers mit den Typen aus

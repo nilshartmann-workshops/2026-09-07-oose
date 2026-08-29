@@ -1,8 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useEffectEvent, useState } from "react";
 
 import { playNotificationSound } from "./notification-sound.ts";
 import { addToast, clearToasts, ToastContainer } from "./watering-toasts.tsx";
-import { subscribeToWateringUpdates } from "./watering-updates.ts";
+import {
+  subscribeToWateringUpdates,
+  type WateringUpdate,
+} from "./watering-updates.ts";
 
 /**
  * Andere Benutzer gießen dieselben Pflanzen. Über eine (simulierte)
@@ -16,24 +19,48 @@ export default function WateringNotifications() {
   const [updatesEnabled, setUpdatesEnabled] = useState(true);
   const [soundEnabled, setSoundEnabled] = useState(true);
 
+  // Effect Event: liest immer den aktuellen Wert von "soundEnabled",
+  // ist aber nicht reaktiv. Gehört deshalb NICHT ins Dependency-Array.
+  const handleUpdate = useEffectEvent((update: WateringUpdate) => {
+    addToast(
+      `${soundEnabled ? "🔔" : "🔕"} ${update.plantName} wurde gegossen`,
+    );
+    if (soundEnabled) {
+      playNotificationSound();
+    }
+  });
+
   useEffect(() => {
     if (!updatesEnabled) {
       return;
     }
 
-    const unsubscribe = subscribeToWateringUpdates(location, (update) => {
-      addToast(
-        `${soundEnabled ? "🔔" : "🔕"} ${update.plantName} wurde gegossen`,
-      );
-      if (soundEnabled) {
-        playNotificationSound();
-      }
-    });
+    // handleUpdate wird im Effekt AUFGERUFEN und nicht weitergereicht,
+    // deshalb die Arrow-Funktion drumherum.
+    const unsubscribe = subscribeToWateringUpdates(location, (update) =>
+      handleUpdate(update),
+    );
 
     return () => {
       unsubscribe();
       clearToasts();
     };
+
+    // 🔎 Zeigen: ESLint verlangt "handleUpdate" NICHT im Array
+    //
+    // 🔎 Häkchen bei "Ton" mehrfach umlegen -> Konsole bleibt ruhig, der
+    //    Drei-Sekunden-Takt läuft durch, der NÄCHSTE Toast zeigt das
+    //    neue Symbol. Frischer Wert ohne Reaktivität.
+    //
+    // 🔎 Häkchen bei "Meldungen empfangen" umlegen -> Verbindung wird
+    //    geschlossen und wieder geöffnet. Genau so soll es sein.
+    //
+    // 🔎 Standort umstellen -> Verbindung wird neu aufgebaut, ab jetzt
+    //    kommt Basilikum statt Aloe Vera.
+    //
+    // 🔎 Kernsatz: Das Dependency-Array ist eine fachliche Entscheidung,
+    //    keine Linter-Frage. Das eine MUSS die Verbindung neu aufbauen,
+    //    das andere DARF es nicht.
   }, [location, updatesEnabled]);
 
   return (

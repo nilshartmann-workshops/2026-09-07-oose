@@ -5,6 +5,7 @@ import PlantList from "./plant-list/PlantList.tsx";
 import { Panel, Tab, TabBar } from "./shared/TabBar.tsx";
 import EffektSpielwiese from "./spielwiese/EffektSpielwiese.tsx";
 import RenderSpielwiese from "./spielwiese/RenderSpielwiese.tsx";
+import WateringNotifications from "./spielwiese/WateringNotifications.tsx";
 
 export default function App() {
   const [activeTabId, setActiveTabId] = useState("list");
@@ -40,6 +41,13 @@ export default function App() {
         >
           Effekte (Spielwiese)
         </Tab>
+        <Tab
+          tabId={"meldungen"}
+          activeTabId={activeTabId}
+          onTabChange={setActiveTabId}
+        >
+          Effekt Event (Spielwiese)
+        </Tab>
 
         <Panel tabId={"list"} activeTabId={activeTabId}>
           <PlantList />
@@ -52,6 +60,9 @@ export default function App() {
         </Panel>
         <Panel tabId={"effekte"} activeTabId={activeTabId}>
           <EffektSpielwiese />
+        </Panel>
+        <Panel tabId={"meldungen"} activeTabId={activeTabId}>
+          <WateringNotifications />
         </Panel>
       </TabBar>
     </div>

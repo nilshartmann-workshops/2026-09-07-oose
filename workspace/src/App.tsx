@@ -1,6 +1,6 @@
+import { Link } from "@tanstack/react-router";
 import { Suspense } from "react";
 
-import PlantForm from "./plant-form/PlantForm.tsx";
 import PlantErrorBoundary from "./plant-list/PlantErrorBoundary.tsx";
 import PlantList from "./plant-list/PlantList.tsx";
 import PlantOrderBar from "./plant-list/PlantOrderBar.tsx";
@@ -13,9 +13,11 @@ import WateringNotifications from "./spielwiese/WateringNotifications.tsx";
 export default function App() {
   return (
     <div className={"AppContainer"}>
+      <div className={"mb-4 flex justify-end"}>
+        <Link to={"/neu"}>Neue Pflanze 🌱</Link>
+      </div>
       <TabBar>
         <Tab tabId={"list"}>Pflanzen</Tab>
-        <Tab tabId={"form"}>Neue Pflanze</Tab>
         <Tab tabId={"render"}>Rendern (Spielwiese)</Tab>
         <Tab tabId={"effekte"}>Effekte (Spielwiese)</Tab>
         <Tab tabId={"meldungen"}>Effekt Event (Spielwiese)</Tab>
@@ -30,9 +32,6 @@ export default function App() {
               <PlantList />
             </Suspense>
           </PlantErrorBoundary>
-        </Panel>
-        <Panel tabId={"form"}>
-          <PlantForm />
         </Panel>
         <Panel tabId={"render"}>
           <RenderSpielwiese />

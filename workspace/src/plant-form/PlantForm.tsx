@@ -1,14 +1,20 @@
 import { DevTool } from "@hookform/devtools";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRef } from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
+
+import IntervalSelector from "./IntervalSelector.tsx";
 
 // 🔎 Zeigen: eine Meldung weglassen, dann steht dort der englische Standardtext
 //    von zod. Die Texte gehören zum Schema und nicht ins Formular.
 const NewPlantSchema = z.object({
   name: z.string().nonempty("Bitte gib der Pflanze einen Namen"),
   location: z.string().nonempty("Bitte gib an, wo die Pflanze steht"),
+  wateringInterval: z
+    .number()
+    .min(1, "Gegossen wird mindestens jeden Tag")
+    .max(200, "So lange hält das keine Pflanze aus"),
 });
 
 type NewPlantFormState = z.infer<typeof NewPlantSchema>;
@@ -20,7 +26,7 @@ export default function PlantForm() {
   //    Hook Form. Ohne ihn kennt das Formular die Regeln des Schemas nicht.
   const form = useForm<NewPlantFormState>({
     resolver: zodResolver(NewPlantSchema),
-    defaultValues: { name: "", location: "" },
+    defaultValues: { name: "", location: "", wateringInterval: 1 },
   });
 
   const { errors } = form.formState;
@@ -72,6 +78,29 @@ export default function PlantForm() {
         {errors.location && (
           <p className={"error-message"}>{errors.location.message}</p>
         )}
+      </div>
+
+      {/* 🔎 Erzählen: der IntervalSelector kennt kein register. Er arbeitet mit
+          interval und onIntervalChange, und der Controller übersetzt dazwischen. */}
+      <div className={"FormControl"}>
+        <Controller
+          control={form.control}
+          name={"wateringInterval"}
+          // 🔎 Erzählen: render ist eine Render Prop. Die Bibliothek führt
+          //    den Wert, das Aussehen bestimmt der Aufrufer.
+          //    field hält Wert und Handler, fieldState den Fehler dazu.
+          render={({ field, fieldState }) => (
+            <>
+              <IntervalSelector
+                interval={field.value}
+                onIntervalChange={field.onChange}
+              />
+              {fieldState.error && (
+                <p className={"error-message"}>{fieldState.error.message}</p>
+              )}
+            </>
+          )}
+        />
       </div>
 
       <div className={"FormButtons"}>

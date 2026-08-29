@@ -1,5 +1,6 @@
 import { DevTool } from "@hookform/devtools";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRef } from "react";
 import { Control, Controller, useForm, useWatch } from "react-hook-form";
 import { z } from "zod";
@@ -19,6 +20,8 @@ const NewPlantSchema = z.object({
 
 type NewPlantFormState = z.infer<typeof NewPlantSchema>;
 
+const ProblemsSchema = z.array(z.object({ error: z.string() }));
+
 export default function PlantForm() {
   // 🔎 Zeigen: den Typ weglassen, dann nimmt register jeden Feldnamen an, auch
   //    einen vertippten.
@@ -31,6 +34,41 @@ export default function PlantForm() {
 
   const { errors } = form.formState;
 
+  const queryClient = useQueryClient();
+
+  const {
+    mutate: addPlant,
+    isPending,
+    isSuccess,
+  } = useMutation({
+    async mutationFn(newPlant: NewPlantFormState) {
+      const response = await fetch("http://localhost:7200/api/plants", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(newPlant),
+      });
+
+      if (!response.ok) {
+        // 🔎 Fallstrick: im Rumpf steht ein Array von Meldungen und nicht eine
+        //    einzelne.
+        const problems = ProblemsSchema.parse(await response.json());
+        throw new Error(problems.map((problem) => problem.error).join(" "));
+      }
+    },
+
+    onSuccess() {
+      queryClient.invalidateQueries({ queryKey: ["plants"] });
+      form.reset();
+    },
+
+    // 🔎 Erzählen: die Meldung des Backends geht ins Namensfeld, denn dort
+    //    steht der Wert, den es abgelehnt hat. React Hook Form nimmt sie über
+    //    setError genauso an wie eine Meldung aus dem Schema.
+    onError(error) {
+      form.setError("name", { message: error.message });
+    },
+  });
+
   /* eslint-disable react-hooks/refs -- Der Zähler liest und schreibt beim
    * Rendern, und genau das verbietet die Regel. Hier ist es der Zweck der
    * Sache, denn wir wollen jeden einzelnen Render sehen. */
@@ -40,7 +78,7 @@ export default function PlantForm() {
   /* eslint-enable react-hooks/refs */
 
   const onSubmit = (newPlant: NewPlantFormState) => {
-    console.log("Neue Pflanze:", newPlant);
+    addPlant(newPlant);
   };
 
   return (
@@ -118,10 +156,12 @@ export default function PlantForm() {
         >
           Beispiel ausfüllen
         </button>
-        <button type={"submit"} className={"primary"}>
+        <button type={"submit"} className={"primary"} disabled={isPending}>
           Pflanze hinzufügen 🌱
         </button>
       </div>
+
+      {isSuccess && <p className={"success-message"}>Pflanze angelegt 🌿</p>}
     </form>
   );
 }

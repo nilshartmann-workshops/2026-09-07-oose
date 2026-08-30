@@ -2,7 +2,10 @@ import dayjs from "dayjs";
 
 import { getDaysUntilWatering } from "@/lib/date-utils";
 
+import FavoriteButton from "./FavoriteButton";
+
 type PlantCardProps = {
+  id: string;
   name: string;
   location: string;
   wateringInterval: number;
@@ -10,6 +13,7 @@ type PlantCardProps = {
 };
 
 export default function PlantCard({
+  id,
   name,
   location,
   wateringInterval,
@@ -45,6 +49,9 @@ export default function PlantCard({
       <header>
         <h2>{name}</h2>
         <div>📍{location}</div>
+        {/* 🔎 Zeigen: die Karte bleibt eine Server Component. Nur der Knopf
+            wandert in den Browser. */}
+        <FavoriteButton id={id} />
       </header>
       <section>
         <div>{wateringInfo}</div>

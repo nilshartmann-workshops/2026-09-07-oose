@@ -11,6 +11,7 @@ export default function PlantCardList({ plants }: PlantCardListProps) {
       {plants.map((p) => (
         <PlantCard
           key={p.id}
+          id={p.id}
           name={p.name}
           location={p.location}
           wateringInterval={p.wateringInterval}

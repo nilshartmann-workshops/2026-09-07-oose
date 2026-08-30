@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import FavoritesPanel from "@/components/FavoritesPanel";
 import PlantCardList from "@/components/PlantCardList";
 import PlantOrderBar from "@/components/PlantOrderBar";
@@ -15,6 +17,11 @@ export default async function HomePage({ searchParams }: PageProps<"/">) {
 
   return (
     <>
+      <div className={"mb-4 flex justify-end"}>
+        {/* 🔎 Zeigen: /nue statt /neu, dann meckert TypeScript. typedRoutes
+            kennt jede Datei unter app/ und prüft den Pfad dagegen. */}
+        <Link href={"/neu"}>Neue Pflanze 🌱</Link>
+      </div>
       <PlantOrderBar orderBy={currentOrder} />
       <div className={"PlantList"}>
         <div>

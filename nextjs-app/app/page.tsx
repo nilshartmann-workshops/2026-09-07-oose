@@ -1,4 +1,4 @@
-import FavoritePlantList from "@/components/FavoritePlantList";
+import FavoritesPanel from "@/components/FavoritesPanel";
 import PlantCardList from "@/components/PlantCardList";
 import PlantOrderBar from "@/components/PlantOrderBar";
 import { getPlants } from "@/lib/api";
@@ -23,7 +23,7 @@ export default async function HomePage({ searchParams }: PageProps<"/">) {
         </div>
         {/* 🔎 Erzählen: dieselben Objekte gehen als Prop über die Grenze. Der
             Server serialisiert sie, der Browser filtert damit. */}
-        <FavoritePlantList plants={plants} />
+        <FavoritesPanel plants={plants} />
       </div>
     </>
   );

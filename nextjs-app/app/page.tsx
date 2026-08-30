@@ -1,3 +1,26 @@
-export default function HomePage() {
-  return <h1>Plant Manager</h1>;
+import PlantCardList from "@/components/PlantCardList";
+import PlantOrderBar from "@/components/PlantOrderBar";
+import { getPlants } from "@/lib/api";
+
+// 🔎 Zeigen: die Komponente ist async und wartet auf die Daten. Kein
+//    useEffect, kein useQuery, kein Ladezustand von Hand.
+export default async function HomePage({ searchParams }: PageProps<"/">) {
+  // 🔎 Erzählen: searchParams ist ein Promise und ein untypisiertes Objekt.
+  //    Ein Wert darf mehrfach in der Adresse stehen, deshalb die Prüfung.
+  const { orderBy } = await searchParams;
+  const currentOrder = typeof orderBy === "string" ? orderBy : "id";
+
+  const plants = await getPlants(currentOrder);
+
+  return (
+    <>
+      <PlantOrderBar orderBy={currentOrder} />
+      <div className={"PlantList"}>
+        <div>
+          <h2>Alle Pflanzen</h2>
+          <PlantCardList plants={plants} />
+        </div>
+      </div>
+    </>
+  );
 }

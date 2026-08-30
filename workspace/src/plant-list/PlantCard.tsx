@@ -1,6 +1,8 @@
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import dayjs from "dayjs";
 
 import { getDaysUntilWatering } from "../shared/date-utils.ts";
+import { plantsQueryOptions } from "./plantsQueryOptions.ts";
 import { useFavoritesStore } from "./useFavoritesStore.ts";
 
 type PlantCardProps = {
@@ -23,6 +25,38 @@ export default function PlantCard({
     state.favoriteIds.includes(id),
   );
   const toggleFavorite = useFavoritesStore((state) => state.toggleFavorite);
+
+  const queryClient = useQueryClient();
+
+  const {
+    mutate: markAsWatered,
+    isPending,
+    error,
+  } = useMutation({
+    async mutationFn() {
+      const response = await fetch(
+        `http://localhost:7200/api/plants/${id}/lastWatered`,
+        {
+          method: "PUT",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ lastWatered: dayjs().format("YYYY-MM-DD") }),
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+    },
+
+    // 🔎 Zeigen: onSuccess weglassen. Das Backend hat den neuen Wert, die Karte
+    //    zeigt weiter den alten, denn im Cache steht die alte Liste.
+    //
+    // 🔎 Nebenbei: jedes Callback bekommt den QueryClient auch im letzten
+    //    Parameter gereicht (context.client). Dann entfällt useQueryClient.
+    onSuccess() {
+      queryClient.invalidateQueries(plantsQueryOptions());
+    },
+  });
 
   const wateringInfo =
     wateringInterval === 1
@@ -62,6 +96,14 @@ export default function PlantCard({
         <div>{wateringInfo}</div>
         {lastWateredMsg}
         {wateringMsg}
+        <button
+          type={"button"}
+          disabled={isPending}
+          onClick={() => markAsWatered()}
+        >
+          💧 Jetzt gegossen
+        </button>
+        {error && <p className={"error-message"}>{error.message}</p>}
       </section>
     </div>
   );

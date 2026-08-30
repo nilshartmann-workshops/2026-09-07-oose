@@ -3,6 +3,7 @@ import dayjs from "dayjs";
 import { getDaysUntilWatering } from "@/lib/date-utils";
 
 import FavoriteButton from "./FavoriteButton";
+import WaterButton from "./WaterButton";
 
 type PlantCardProps = {
   id: string;
@@ -57,6 +58,9 @@ export default function PlantCard({
         <div>{wateringInfo}</div>
         {lastWateredMsg}
         {wateringMsg}
+        <div className={"ButtonBar"}>
+          <WaterButton id={id} />
+        </div>
       </section>
     </div>
   );

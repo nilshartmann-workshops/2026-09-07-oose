@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Link } from "@tanstack/react-router";
 import dayjs from "dayjs";
 
 import { getDaysUntilWatering } from "../shared/date-utils.ts";
@@ -96,13 +97,20 @@ export default function PlantCard({
         <div>{wateringInfo}</div>
         {lastWateredMsg}
         {wateringMsg}
-        <button
-          type={"button"}
-          disabled={isPending}
-          onClick={() => markAsWatered()}
-        >
-          💧 Jetzt gegossen
-        </button>
+        <div className={"ButtonBar"}>
+          <button
+            type={"button"}
+            disabled={isPending}
+            onClick={() => markAsWatered()}
+          >
+            💧 Jetzt gegossen
+          </button>
+          {/* 🔎 Zeigen: params weglassen, dann meckert TypeScript. Der Pfad und
+              seine Parameter kommen aus der Register-Deklaration. */}
+          <Link to={"/$plantId"} params={{ plantId: id }}>
+            Details
+          </Link>
+        </div>
         {error && <p className={"error-message"}>{error.message}</p>}
       </section>
     </div>

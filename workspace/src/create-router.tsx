@@ -3,6 +3,8 @@ import { createRouter } from "@tanstack/react-router";
 import { queryClient } from "./create-query-client.tsx";
 import { routeTree } from "./routeTree.gen.ts";
 
+// 🔎 Zeigen: liegt fertig im Startpunkt. Den Routenbaum schreibt das
+//    Vite-Plugin nach routeTree.gen.ts, sobald eine Datei unter routes/ dazukommt.
 export const plantManagerRouter = createRouter({
   routeTree,
   context: {

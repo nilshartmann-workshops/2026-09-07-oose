@@ -6,6 +6,8 @@ type PlantManagerRouterContext = {
   queryClient: QueryClient;
 };
 
+// 🔎 Zeigen: diese Datei liegt fertig im Startpunkt. <Outlet /> ist die Stelle,
+//    an der die getroffene Route ihren Inhalt einsetzt.
 export const Route = createRootRouteWithContext<PlantManagerRouterContext>()({
   component: () => <Outlet />,
 });

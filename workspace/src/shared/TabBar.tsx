@@ -1,4 +1,10 @@
-import { createContext, ReactNode, useContext, useState } from "react";
+import {
+  Activity,
+  createContext,
+  ReactNode,
+  useContext,
+  useState,
+} from "react";
 
 /**
  * Eine Tab-Navigation aus drei Bausteinen: `TabBar` ist der Rahmen, `Tab` ein
@@ -97,9 +103,15 @@ type PanelProps = {
 export function Panel({ tabId, children }: PanelProps) {
   const { activeTabId } = useTabBarContext();
 
-  if (activeTabId !== tabId) {
-    return null;
-  }
-
-  return <div className={"TabPanel"}>{children}</div>;
+  // 🔎 Erzählen: mode="hidden" statt return null. Der Inhalt bleibt im Baum,
+  //    deshalb überlebt der Formularzustand den Reiterwechsel.
+  // 🔎 Zeigen: die Zähler auf der Render-Spielwiese laufen jetzt weiter, statt
+  //    beim Reiterwechsel neu zu beginnen, und sie stehen schon auf 1, bevor
+  //    der Reiter das erste Mal offen war. Ein verstecktes Panel rendert React
+  //    trotzdem, es lässt nur seine Effekte aus.
+  return (
+    <Activity mode={activeTabId === tabId ? "visible" : "hidden"}>
+      <div className={"TabPanel"}>{children}</div>
+    </Activity>
+  );
 }

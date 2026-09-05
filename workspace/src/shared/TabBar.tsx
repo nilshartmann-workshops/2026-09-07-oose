@@ -3,6 +3,7 @@ import {
   createContext,
   ReactNode,
   useContext,
+  useRef,
   useState,
 } from "react";
 
@@ -55,6 +56,8 @@ export function TabBar({ children }: TabBarProps) {
 
   // 🔎 Erzählen: seit React 19 ist der Context selbst der Provider. Die alte
   //    Form <TabBarContext.Provider> gibt es weiterhin.
+  // 🔎 Zeigen: useMemo um den Wert legen, es ändert nichts. Hier ist nichts zu
+  //    stabilisieren, denn activeTabId ändert sich ja wirklich.
   return (
     <TabBarContext value={{ activeTabId, onTabChange: setActiveTabId }}>
       <div className={"TabBar"}>{children}</div>
@@ -73,8 +76,19 @@ type TabProps = {
  * Ein einzelner Reiter in der Navigationsleiste. Er ist deaktiviert, solange er
  * der aktive ist, und meldet beim Klick seine `tabId` an den Context.
  */
+// 🔎 Zeigen: Tab in memo() wickeln. Seine Properties sind konstant, der Zähler
+//    läuft trotzdem weiter, denn memo vergleicht Properties, und ein Context
+//    ist keine.
 export function Tab({ tabId, children }: TabProps) {
   const { activeTabId, onTabChange } = useTabBarContext();
+
+  /* eslint-disable react-hooks/refs -- Der Zähler liest und schreibt beim
+   * Rendern, und genau das verbietet die Regel. Hier ist es der Zweck der
+   * Sache, denn wir wollen jeden einzelnen Render sehen. */
+  const renderCount = useRef(0);
+  renderCount.current++;
+  const renders = renderCount.current;
+  /* eslint-enable react-hooks/refs */
 
   const isActive = activeTabId === tabId;
 
@@ -84,7 +98,7 @@ export function Tab({ tabId, children }: TabProps) {
       disabled={isActive}
       onClick={() => onTabChange(tabId)}
     >
-      {children}
+      {children} <span className={"RenderCounter"}>{renders}×</span>
     </button>
   );
 }

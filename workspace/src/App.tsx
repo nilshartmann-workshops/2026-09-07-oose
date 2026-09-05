@@ -3,6 +3,7 @@ import { useState } from "react";
 import PlantForm from "./plant-form/PlantForm.tsx";
 import PlantList from "./plant-list/PlantList.tsx";
 import { Panel, Tab, TabBar } from "./shared/TabBar.tsx";
+import BeetSpielwiese from "./spielwiese/BeetSpielwiese.tsx";
 import EffektSpielwiese from "./spielwiese/EffektSpielwiese.tsx";
 import RenderSpielwiese from "./spielwiese/RenderSpielwiese.tsx";
 import WateringNotifications from "./spielwiese/WateringNotifications.tsx";
@@ -48,6 +49,13 @@ export default function App() {
         >
           Effekt Event (Spielwiese)
         </Tab>
+        <Tab
+          tabId={"beet"}
+          activeTabId={activeTabId}
+          onTabChange={setActiveTabId}
+        >
+          Compiler (Spielwiese)
+        </Tab>
 
         <Panel tabId={"list"} activeTabId={activeTabId}>
           <PlantList />
@@ -63,6 +71,9 @@ export default function App() {
         </Panel>
         <Panel tabId={"meldungen"} activeTabId={activeTabId}>
           <WateringNotifications />
+        </Panel>
+        <Panel tabId={"beet"} activeTabId={activeTabId}>
+          <BeetSpielwiese />
         </Panel>
       </TabBar>
     </div>

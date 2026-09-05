@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { createContext, ReactNode, useContext, useState } from "react";
 
 /**
  * Eine Tab-Navigation aus drei Bausteinen: `TabBar` ist der Rahmen, `Tab` ein
@@ -6,22 +6,34 @@ import { ReactNode } from "react";
  * Panel des aktiven Reiters, ein Klick macht einen Reiter aktiv, und der Button
  * des aktiven Reiters ist `disabled`.
  *
- * Welcher Reiter aktiv ist, weiß die TabBar selbst nicht. Der Zustand liegt in
- * der Komponente, die sie benutzt, und wird jedem `Tab` und jedem `Panel`
- * einzeln als Property hereingereicht:
+ * Welcher Reiter aktiv ist, weiß die `TabBar` selbst und legt es in einen
+ * Context. `Tab` und `Panel` lesen es von dort, und der Aufrufer gibt jedem nur
+ * noch seine `tabId`:
  *
  *   <TabBar>
- *     <Tab tabId="list" activeTabId={activeTabId} onTabChange={setActiveTabId}>
- *       Pflanzen
- *     </Tab>
- *     <Panel tabId="list" activeTabId={activeTabId}>
+ *     <Tab tabId="list">Pflanzen</Tab>
+ *     <Panel tabId="list">
  *       <PlantList />
  *     </Panel>
  *   </TabBar>
- *
- * ⚠️ Diese Datei ist fertig, du musst hier nichts implementieren. Wir schauen
- *    sie uns gemeinsam an und bauen sie später mehrfach um.
  */
+
+type TabBarContextValue = {
+  activeTabId: string;
+  onTabChange: (tabId: string) => void;
+};
+
+const TabBarContext = createContext<TabBarContextValue | null>(null);
+
+function useTabBarContext() {
+  const context = useContext(TabBarContext);
+
+  if (context === null) {
+    throw new Error("Tab and Panel must be used inside a TabBar");
+  }
+
+  return context;
+}
 
 type TabBarProps = {
   /** Enthält die Tabs und Panels dieser TabBar */
@@ -29,29 +41,35 @@ type TabBarProps = {
 };
 
 /**
- * Äußerer Rahmen der Tab-Navigation. Rendert alle Kinder, also die `Tab`- und
- * `Panel`-Elemente.
+ * Äußerer Rahmen der Tab-Navigation. Hält den aktiven Reiter und stellt ihn
+ * seinen Kindern über den Context bereit.
  */
 export function TabBar({ children }: TabBarProps) {
-  return <div className={"TabBar"}>{children}</div>;
+  const [activeTabId, setActiveTabId] = useState("list");
+
+  // 🔎 Erzählen: seit React 19 ist der Context selbst der Provider. Die alte
+  //    Form <TabBarContext.Provider> gibt es weiterhin.
+  return (
+    <TabBarContext value={{ activeTabId, onTabChange: setActiveTabId }}>
+      <div className={"TabBar"}>{children}</div>
+    </TabBarContext>
+  );
 }
 
 type TabProps = {
   /** Verbindet diesen Reiter mit dem `Panel`, das dieselbe `tabId` hat */
   tabId: string;
-  /** Sagt, welcher Reiter gerade aktiv ist */
-  activeTabId: string;
-  /** Wird mit der `tabId` dieses Reiters aufgerufen, wenn man ihn anklickt */
-  onTabChange: (tabId: string) => void;
   /** Die Beschriftung des Buttons */
   children: ReactNode;
 };
 
 /**
  * Ein einzelner Reiter in der Navigationsleiste. Er ist deaktiviert, solange er
- * der aktive ist, und meldet beim Klick seine `tabId` nach außen.
+ * der aktive ist, und meldet beim Klick seine `tabId` an den Context.
  */
-export function Tab({ tabId, activeTabId, onTabChange, children }: TabProps) {
+export function Tab({ tabId, children }: TabProps) {
+  const { activeTabId, onTabChange } = useTabBarContext();
+
   const isActive = activeTabId === tabId;
 
   return (
@@ -68,8 +86,6 @@ export function Tab({ tabId, activeTabId, onTabChange, children }: TabProps) {
 type PanelProps = {
   /** Verbindet diesen Inhalt mit dem `Tab`, der dieselbe `tabId` hat */
   tabId: string;
-  /** Sagt, welcher Reiter gerade aktiv ist */
-  activeTabId: string;
   /** Der Inhalt, der hinter diesem Reiter steht */
   children: ReactNode;
 };
@@ -78,7 +94,9 @@ type PanelProps = {
  * Der Inhalt hinter einem Reiter. Ist ein anderer Reiter aktiv, rendert das
  * Panel nichts, und sein Inhalt wird dabei abgebaut.
  */
-export function Panel({ tabId, activeTabId, children }: PanelProps) {
+export function Panel({ tabId, children }: PanelProps) {
+  const { activeTabId } = useTabBarContext();
+
   if (activeTabId !== tabId) {
     return null;
   }

@@ -486,3 +486,59 @@
     }
   }
 }
+
+@layer components {
+  .Beet {
+    @apply relative grid touch-none gap-px rounded-lg bg-green-900 p-2;
+    grid-template-columns: repeat(var(--spalten), minmax(0, 1fr));
+  }
+
+  .Pflanze {
+    @apply flex h-6 items-end justify-center bg-green-800;
+  }
+
+  .Pflanze::after {
+    @apply block w-1 rounded-t bg-green-500 content-[''];
+    height: var(--hoehe);
+  }
+
+  .Pflanze[data-gegossen="true"] {
+    @apply bg-sky-700;
+  }
+
+  .Pflanze[data-gegossen="true"]::after {
+    @apply bg-lime-300;
+  }
+
+  .Giesskanne {
+    @apply pointer-events-none absolute h-8 w-8 -translate-x-1/2 -translate-y-1/2 rounded-full border-4 border-sky-300 bg-sky-500/40;
+  }
+
+  .BeetAnzeige {
+    @apply mb-2 font-mono text-sm;
+  }
+
+  .BeetLeiste {
+    @apply mb-2 flex items-center gap-x-3;
+  }
+
+  .BeetLeiste label {
+    @apply inline text-sm;
+  }
+
+  .BeetLeiste input[type="range"] {
+    @apply w-48;
+  }
+
+  .BeetLeiste output {
+    @apply inline-block w-24 font-mono text-sm;
+  }
+
+  .BeetCompiler {
+    @apply font-semibold text-red-700;
+  }
+
+  .BeetCompiler[data-an="true"] {
+    @apply text-green-700;
+  }
+}

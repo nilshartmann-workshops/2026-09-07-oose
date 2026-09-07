@@ -1,44 +1,59 @@
-import { useEffect, useState } from "react";
+import { useEffect, useEffectEvent, useState } from "react";
 
 import { playNotificationSound } from "./notification-sound.ts";
 import { addToast, clearToasts, ToastContainer } from "./watering-toasts.tsx";
-import { subscribeToWateringUpdates } from "./watering-updates.ts";
+import {
+  subscribeToWateringUpdates,
+  WateringUpdate,
+} from "./watering-updates.ts";
 
-/**
- * Andere Benutzer gießen dieselben Pflanzen. Über eine (simulierte)
- * Serververbindung bekommen wir davon Meldungen.
- *
- * Nicht jede Einstellung geht die Verbindung etwas an: Standort und Empfang
- * schon, der Ton nicht.
- */
 export default function WateringNotifications() {
   const [location, setLocation] = useState("bedroom");
-  const [updatesEnabled, setUpdatesEnabled] = useState(true);
+  const [updatesEnabled, setUpdatesEnabled] = useState(false);
   const [soundEnabled, setSoundEnabled] = useState(true);
+
+  const handleUpdate = useEffectEvent( (update: WateringUpdate) => {
+    addToast(
+      `${soundEnabled ? "🔔" : "🔕"} ${update.plantName} wurde gegossen`,
+    );
+    if (soundEnabled) {
+      playNotificationSound();
+    }
+  });
 
   useEffect(() => {
     if (!updatesEnabled) {
       return;
     }
-
-    const unsubscribe = subscribeToWateringUpdates(location, (update) => {
-      addToast(
-        `${soundEnabled ? "🔔" : "🔕"} ${update.plantName} wurde gegossen`,
-      );
-      if (soundEnabled) {
-        playNotificationSound();
-      }
-    });
+    const unsubscribe = subscribeToWateringUpdates(location, handleUpdate)
+    // (update) => {
+    //   addToast(
+    //     `${soundEnabled ? "🔔" : "🔕"} ${update.plantName} (${update.location})wurde gegossen`,
+    //   );
+    //   if (soundEnabled) {
+    //     playNotificationSound();
+    //   }
+    // });
 
     return () => {
       unsubscribe();
       clearToasts();
     };
-  }, [location, updatesEnabled]);
+  },
+    [location, updatesEnabled]
+  );
 
   return (
     <div className={"space-y-4 rounded-lg bg-white p-4 shadow-md"}>
       <ToastContainer />
+
+      <button
+        className={"secondary flex items-center p-1"}
+        type={"button"}
+        onClick={() => setUpdatesEnabled(!updatesEnabled)}
+      >
+        {updatesEnabled ? "Listener beenden" : "Listener starten"}
+      </button>
 
       <label className={"flex items-center gap-x-2"}>
         Standort
@@ -46,15 +61,6 @@ export default function WateringNotifications() {
           <option value={"bedroom"}>Schlafzimmer</option>
           <option value={"kitchen"}>Küche</option>
         </select>
-      </label>
-
-      <label className={"flex items-center gap-x-2"}>
-        <input
-          type={"checkbox"}
-          checked={updatesEnabled}
-          onChange={(e) => setUpdatesEnabled(e.target.checked)}
-        />
-        Meldungen empfangen
       </label>
 
       <label className={"flex items-center gap-x-2"}>

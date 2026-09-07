@@ -6,9 +6,12 @@ import { createRoot } from "react-dom/client";
 
 import App from "./App.tsx";
 import { queryClient } from "./create-query-client.tsx";
+import { StrictMode } from "react";
 
 createRoot(document.getElementById("root")!).render(
   <QueryClientProvider client={queryClient}>
-    <App />
+    {/*<StrictMode>*/}
+      <App />
+    {/*</StrictMode>*/}
   </QueryClientProvider>,
 );

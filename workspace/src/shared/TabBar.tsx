@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { Activity, ReactNode } from "react";
 
 /**
  * Eine Tab-Navigation aus drei Bausteinen: `TabBar` ist der Rahmen, `Tab` ein
@@ -79,9 +79,13 @@ type PanelProps = {
  * Panel nichts, und sein Inhalt wird dabei abgebaut.
  */
 export function Panel({ tabId, activeTabId, children }: PanelProps) {
-  if (activeTabId !== tabId) {
-    return null;
-  }
+  // if (activeTabId !== tabId) {
+  //   return null;
+  // }
 
-  return <div className={"TabPanel"}>{children}</div>;
+  return (
+    <Activity mode={activeTabId !== tabId ? "hidden" : "visible"}>
+      <div className={"TabPanel"}>{children}</div>
+    </Activity>
+  );
 }

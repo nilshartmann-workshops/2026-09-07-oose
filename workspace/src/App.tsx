@@ -6,6 +6,7 @@ import { Panel, Tab, TabBar } from "./shared/TabBar.tsx";
 import RenderSpielwiese from "./spielwiese/RenderSpielwiese.tsx";
 import Counter from "./spielwiese/Counter.tsx";
 import WateringNotifications from "./spielwiese/WateringNotifications.tsx";
+import BeetSpielwiese from "./spielwiese/BeetSpielwiese.tsx";
 
 export default function App() {
   const [activeTabId, setActiveTabId] = useState("list");
@@ -13,6 +14,13 @@ export default function App() {
   return (
     <div className={"AppContainer"}>
       <TabBar>
+        {/*<Tab*/}
+        {/*  tabId={"beet"}*/}
+        {/*  activeTabId={activeTabId}*/}
+        {/*  onTabChange={setActiveTabId}*/}
+        {/*>*/}
+        {/*  Beet*/}
+        {/*</Tab>*/}
         <Tab
           tabId={"meldungen"}
           activeTabId={activeTabId}
@@ -51,6 +59,9 @@ export default function App() {
           Neue Pflanze
         </Tab>
 
+        {/*<Panel tabId={"beet"} activeTabId={activeTabId}>*/}
+        {/*  <BeetSpielwiese />*/}
+        {/*</Panel>*/}
         <Panel tabId={"effekt"} activeTabId={activeTabId}>
           <Counter />
         </Panel>

@@ -3,9 +3,37 @@ import { useEffect, useState } from "react";
 // Pure Funktionen
 // 1. Render Phase: Liefert virtuellen Dom zurück SEITENEFFEKTE VERBOTEN!!!!
 // 2. Commit Phase: Seiteneffekte dürfen verwendet werden
+
+// 100      |  setAppleCount
+// 201      |  setOrangeCount
+
+function useTimer() {
+  const [timerState, setTimerState] = useState(123);
+
+  useEffect(() => {
+    setInterval( () => setTimerState(x => x + 1), 1000)
+  }, []);
+
+  return timerState;
+}
+
+// function moin() {
+//
+//   useTimer()
+//
+// }
+//
+// class HelloWorld {
+//
+//
+// }
+
 export default function Counter() {
-  const [appleCount, setAppleCount] = useState(0);
-  const [orangeCount, setOrangeCount] = useState(0);
+  const [appleCount, setAppleCount] = useState(100); // 1.
+  const [orangeCount, setOrangeCount] = useState(200); // 2.
+  const timer = useTimer();
+
+  console.log("Timer", timer);
 
   // // JAVA
   // useEffect( () -> {

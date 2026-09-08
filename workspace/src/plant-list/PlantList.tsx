@@ -46,7 +46,7 @@ export default function PlantList() {
         <h2>Alle Pflanzen</h2>
         <PlantCardList plants={allPlants} />
       </div>
-      <FavoritePlantList plants={allPlants} />
+      {/*<FavoritePlantList plants={allPlants} />*/}
     </div>
   );
 }

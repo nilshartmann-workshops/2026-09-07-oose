@@ -29,6 +29,7 @@ type PersonMitAdresse = {
   }
 }
 
+import { useShallow} from "zustand/react/shallow"
 
 export default function PlantCard({
   id,
@@ -38,7 +39,36 @@ export default function PlantCard({
   lastWatered,
 }: PlantCardProps) {
 
-  const store = useFavoriteStore();
+  console.log("PlantCard", id, new Date().toLocaleTimeString())
+
+
+  // const x = useFavoriteStore(
+  //   // Selektor-Funktion
+  //   useShallow(
+  //     store => store.favoriteIds.filter(fId => fId === "...")
+  //   )
+  // )
+
+  // const {toggleFav, isFavorite } = useFavoriteStore(
+  //   store => {
+  //     return {
+  //       toggleFav: store.toggleFavorite,
+  //       isFavorite: store.favoriteIds.includes(id),
+  //     };
+  //   }
+  // )
+  const toggleFav = useFavoriteStore(
+    // Selektor-Funktion
+    store => store.toggleFavorite,
+
+  )
+  // const store = useFavoriteStore();
+
+  const isFavorite = useFavoriteStore(
+    // Selektor-Funktion
+    store => store.favoriteIds.includes(id)
+  )
+
 
   // const [person, setPerson ] = useState<PersonMitAdresse>({firstname: "...", lastname: "..."});
   //
@@ -116,7 +146,11 @@ export default function PlantCard({
         {lastWateredMsg}
         {wateringMsg}
       </section>
-      <button onClick={() => store.toggleFavorite(id)}>Favorite!</button>
+      <button onClick={() => toggleFav(id)}>
+
+        { isFavorite ? "Favorite entfernen" : "Favorit hinzufügen" }
+
+      </button>
     </div>
   );
 }

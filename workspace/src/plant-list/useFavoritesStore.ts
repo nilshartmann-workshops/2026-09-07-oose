@@ -34,7 +34,10 @@ export const useFavoriteStore = create<FavoritesStore>()( (set, getState) => {
   };
 });
 
-// export const isFavorite = (store: FavoritesStore, id: string) => {}
+export const selectIsFavorite = (id: string) => {
+  return (state: FavoritesStore) => state.favoriteIds.includes(id);
+}
+
 
 
 

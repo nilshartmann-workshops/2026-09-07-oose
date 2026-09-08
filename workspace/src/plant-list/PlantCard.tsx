@@ -4,7 +4,7 @@ import {produce} from "immer"
 
 import { getDaysUntilWatering } from "../shared/date-utils.ts";
 import { useState } from "react";
-import { useFavoriteStore } from "./useFavoritesStore.ts";
+import { selectIsFavorite, useFavoriteStore } from "./useFavoritesStore.ts";
 
 type PlantCardProps = {
   id: string;
@@ -66,7 +66,7 @@ export default function PlantCard({
 
   const isFavorite = useFavoriteStore(
     // Selektor-Funktion
-    store => store.favoriteIds.includes(id)
+    selectIsFavorite(id)
   )
 
 

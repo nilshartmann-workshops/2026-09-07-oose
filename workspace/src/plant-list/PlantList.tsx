@@ -1,5 +1,6 @@
 import { Plant } from "../types.ts";
 import PlantCardList from "./PlantCardList.tsx";
+import FavoritePlantList from "./FavoritePlantList.tsx";
 
 const allPlants: Plant[] = [
   {
@@ -45,6 +46,7 @@ export default function PlantList() {
         <h2>Alle Pflanzen</h2>
         <PlantCardList plants={allPlants} />
       </div>
+      <FavoritePlantList plants={allPlants} />
     </div>
   );
 }

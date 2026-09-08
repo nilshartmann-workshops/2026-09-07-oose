@@ -5,7 +5,7 @@ import react from "@vitejs/plugin-react";
 import { playwright } from "@vitest/browser-playwright";
 import { defineConfig } from "vite";
 
-const enableReactCompiler = true;
+const enableReactCompiler = false;
 
 const reactPluginOptions = enableReactCompiler
   ? { babel: { plugins: ["babel-plugin-react-compiler"] } }

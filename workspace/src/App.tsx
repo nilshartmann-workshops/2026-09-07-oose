@@ -8,73 +8,36 @@ import Counter from "./spielwiese/Counter.tsx";
 import WateringNotifications from "./spielwiese/WateringNotifications.tsx";
 import BeetSpielwiese from "./spielwiese/BeetSpielwiese.tsx";
 
+
 export default function App() {
-  const [activeTabId, setActiveTabId] = useState("list");
 
   return (
     <div className={"AppContainer"}>
-      <TabBar>
-        {/*<Tab*/}
-        {/*  tabId={"beet"}*/}
-        {/*  activeTabId={activeTabId}*/}
-        {/*  onTabChange={setActiveTabId}*/}
-        {/*>*/}
-        {/*  Beet*/}
-        {/*</Tab>*/}
-        <Tab
-          tabId={"meldungen"}
-          activeTabId={activeTabId}
-          onTabChange={setActiveTabId}
-        >
-          Effekt Event
-        </Tab>
-        <Tab
-          tabId={"effekt"}
-          activeTabId={activeTabId}
-          onTabChange={setActiveTabId}
-        >
-          Effekt Beispiel
-        </Tab>
+      <TabBar initialTabId={"list"}>
+        <Tab tabId={"meldungen"}>Effekt Event</Tab>
+        <Tab tabId={"effekt"}>Effekt Beispiel</Tab>
 
-        <Tab
-          tabId={"render"}
-          activeTabId={activeTabId}
-          onTabChange={setActiveTabId}
-        >
-          Render Beispiel
-        </Tab>
+        <Tab tabId={"render"}>Render Beispiel</Tab>
 
-        <Tab
-          tabId={"list"}
-          activeTabId={activeTabId}
-          onTabChange={setActiveTabId}
-        >
-          Pflanzen
-        </Tab>
-        <Tab
-          tabId={"form"}
-          activeTabId={activeTabId}
-          onTabChange={setActiveTabId}
-        >
-          Neue Pflanze
-        </Tab>
+        <Tab tabId={"list"}>Pflanzen</Tab>
+        <Tab tabId={"form"}>Neue Pflanze</Tab>
 
         {/*<Panel tabId={"beet"} activeTabId={activeTabId}>*/}
         {/*  <BeetSpielwiese />*/}
         {/*</Panel>*/}
-        <Panel tabId={"effekt"} activeTabId={activeTabId}>
+        <Panel tabId={"effekt"}>
           <Counter />
         </Panel>
-        <Panel tabId={"render"} activeTabId={activeTabId}>
+        <Panel tabId={"render"}>
           <RenderSpielwiese />
         </Panel>
-        <Panel tabId={"list"} activeTabId={activeTabId}>
+        <Panel tabId={"list"}>
           <PlantList />
         </Panel>
-        <Panel tabId={"form"} activeTabId={activeTabId}>
+        <Panel tabId={"form"}>
           <PlantForm />
         </Panel>
-        <Panel tabId={"meldungen"} activeTabId={activeTabId}>
+        <Panel tabId={"meldungen"}>
           <WateringNotifications />
         </Panel>
       </TabBar>

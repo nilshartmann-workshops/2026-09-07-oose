@@ -1,5 +1,5 @@
 import {z} from "zod";
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, stripSearchParams } from '@tanstack/react-router'
 import App from "../App"
 
 const SearchParam = z.object({
@@ -10,9 +10,9 @@ export const Route = createFileRoute('/')({
   component: App,
   validateSearch: SearchParam,
   // Such-Parameter beim Seitenwechsel erhalten:
-  // search: {
-  //   middlewares: retainSearchParam
-  // }
+  search: {
+    middlewares: [stripSearchParams({orderBy: "id"})]
+  }
 })
 //
 // function RouteComponent() {

@@ -6,6 +6,7 @@ import { routeTree } from "./routeTree.gen.ts";
 export const plantManagerRouter = createRouter({
   routeTree,
   // defaultPreload: "viewport",
+  scrollRestoration: true,
   context: {
     queryClient,
   },

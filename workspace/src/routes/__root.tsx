@@ -8,4 +8,8 @@ type PlantManagerRouterContext = {
 
 export const Route = createRootRouteWithContext<PlantManagerRouterContext>()({
   component: () => <Outlet />,
+  beforeLoad() {
+    //
+  },
+
 });

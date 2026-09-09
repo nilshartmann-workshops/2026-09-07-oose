@@ -210,9 +210,12 @@ export default function PlantCard({
         {isPending ? "Wird gegossen" : "💧 Jetzt gegossen"}
       </button>
       <Link to={"/plants/$plantId"}
-            params={{plantId: id}}>
+            params={{plantId: id}}
+      >
         Pflanzen Details
       </Link>
     </div>
   );
 }
+
+// http://localhost:3000/plants/10?orderBy=id

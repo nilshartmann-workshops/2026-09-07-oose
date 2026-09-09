@@ -1,11 +1,11 @@
 import { queryOptions } from "@tanstack/react-query";
 import { PlantSchema } from "../types.ts";
 
-export const getPlantsQueryOptions = () => queryOptions({
-  queryKey: ["plants"],
+export const getPlantsQueryOptions = (orderBy: "id" | "lastWatered" = "id") => queryOptions({
+  queryKey: ["plants", orderBy],
   async queryFn() {
     //
-    const response = await fetch("http://localhost:7200/api/plants?slow=100"); // HTTP GET
+    const response = await fetch("http://localhost:7200/api/plants?slow=100&orderBy=" + orderBy); // HTTP GET
 
     if (!response.ok) {
       throw new Error("Ging nicht :-(");
@@ -18,3 +18,22 @@ export const getPlantsQueryOptions = () => queryOptions({
   },
   // staleTime: 20 * 1000
 });
+
+export const plantQueryOptions = (plantId: string) => {
+  return queryOptions({
+    queryKey: ["plants", plantId],
+    queryFn: async () => {
+      const response = await fetch(
+        `http://localhost:7200/api/plants/${plantId}`,
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      return PlantSchema.parse(data);
+    },
+  });
+};

@@ -2,7 +2,7 @@ import { Plant, PlantSchema } from "../types.ts";
 import PlantCardList from "./PlantCardList.tsx";
 import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import FavoritePlantList from "./FavoritePlantList.tsx";
-
+import PlantOrderBar from "./PlantOrderBar.tsx"
 // // tagged union type
 // type SuccessServerResponse = {
 //   data: string;
@@ -89,6 +89,7 @@ export default function PlantList() {
   return (
     <div className={"PlantList"}>
       <div>
+        <PlantOrderBar />
         <h2>Alle Pflanzen</h2>
         <PlantCardList />
       </div>

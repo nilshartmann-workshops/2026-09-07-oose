@@ -1,7 +1,7 @@
 import dayjs from "dayjs";
 
 import { produce } from "immer";
-
+import { Link } from "@tanstack/react-router";
 import { getDaysUntilWatering } from "../shared/date-utils.ts";
 import { useState } from "react";
 import { selectIsFavorite, useFavoriteStore } from "./useFavoritesStore.ts";
@@ -192,7 +192,7 @@ export default function PlantCard({
   return (
     <div className={"PlantCard"}>
       <header>
-        <h2>{name}</h2>
+        <h2>{name} ({id})</h2>
         <div>📍{location}</div>
       </header>
       <section>
@@ -209,6 +209,9 @@ export default function PlantCard({
               onClick={() => markAsWatered(dayjs().format("YYYY-MM-DD"))}>
         {isPending ? "Wird gegossen" : "💧 Jetzt gegossen"}
       </button>
+      <Link to={"/plants/$plantId"} params={{
+        plantId: id
+      }}>Pflanzen Details</Link>
     </div>
   );
 }

@@ -3,13 +3,21 @@ import PlantCard from "./PlantCard.tsx";
 import FavoritePlantList from "./FavoritePlantList.tsx";
 import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { getPlantsQueryOptions } from "./plant-queries.ts";
+import { useSearch } from "@tanstack/react-router";
 
 type PlantCardListProps = {
   plants?: Plant[];
 };
+
+
 export default function PlantCardList() {
 
-  const result = useSuspenseQuery(getPlantsQueryOptions());
+  const orderBy = useSearch({
+    from: "/",
+    select: state => state.orderBy
+  });
+
+  const result = useSuspenseQuery(getPlantsQueryOptions(orderBy));
 
   const plants = result.data;
 

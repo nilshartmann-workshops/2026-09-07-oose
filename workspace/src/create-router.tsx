@@ -5,6 +5,7 @@ import { routeTree } from "./routeTree.gen.ts";
 
 export const plantManagerRouter = createRouter({
   routeTree,
+  // defaultPreload: "viewport",
   context: {
     queryClient,
   },

@@ -209,9 +209,10 @@ export default function PlantCard({
               onClick={() => markAsWatered(dayjs().format("YYYY-MM-DD"))}>
         {isPending ? "Wird gegossen" : "💧 Jetzt gegossen"}
       </button>
-      <Link to={"/plants/$plantId"} params={{
-        plantId: id
-      }}>Pflanzen Details</Link>
+      <Link to={"/plants/$plantId"}
+            params={{plantId: id}}>
+        Pflanzen Details
+      </Link>
     </div>
   );
 }

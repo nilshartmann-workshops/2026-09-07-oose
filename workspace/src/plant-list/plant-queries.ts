@@ -24,7 +24,7 @@ export const plantQueryOptions = (plantId: string) => {
     queryKey: ["plants", plantId],
     queryFn: async () => {
       const response = await fetch(
-        `http://localhost:7200/api/plants/${plantId}`,
+        `http://localhost:7200/api/plants/${plantId}?slow=2000`,
       );
 
       if (!response.ok) {

@@ -26,7 +26,12 @@ export function setupPlantsApi(app) {
         error: `Invalid 'orderBy' search param '${orderBy}' Allowed values: '${allowedOrderBy}'`,
       });
     }
-    return res.status(200).json(sortPlants(plants, orderBy));
+    return res.status(200).json(
+      sortPlants(plants, orderBy).map((p) => ({
+        ...p,
+        name: p.name + new Date().toLocaleTimeString(),
+      })),
+    );
   });
 
   const allowedProperties = [

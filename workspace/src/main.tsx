@@ -7,11 +7,14 @@ import { createRoot } from "react-dom/client";
 import App from "./App.tsx";
 import { queryClient } from "./create-query-client.tsx";
 import { StrictMode } from "react";
+import { ErrorBoundary } from "react-error-boundary";
 
 createRoot(document.getElementById("root")!).render(
   <QueryClientProvider client={queryClient}>
     {/*<StrictMode>*/}
+    <ErrorBoundary fallback={<div>Fehler</div>}>
       <App />
+    </ErrorBoundary>
     {/*</StrictMode>*/}
   </QueryClientProvider>,
 );

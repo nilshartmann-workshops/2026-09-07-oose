@@ -17,7 +17,7 @@ function toggle(ids: string[], id: string): string[] {
 
 export const useFavoriteStore = create<FavoritesStore>()( (set, getState) => {
   return {
-    favoriteIds: [],
+    favoriteIds: ["9"],
 
     // ACTIONS:
     clear() {

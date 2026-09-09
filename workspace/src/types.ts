@@ -1,5 +1,6 @@
 import { z } from "zod";
 
+
 // export type Plant = {
 //   id: string;
 //   name: string;
@@ -80,26 +81,23 @@ type Versicherung  = {
 //
 // )
 
-const PlantSchema = z.object({
-  id: z.string().min(10),
+export const PlantSchema = z.object({
+  id: z.string(),
   name: z.string(),
   location: z.string(),
   wateringInterval: z.number(),
   lastWatered: z.string().optional(),
-
-  a: z.string().optional(),
-  b: z.string().optional(),
 })
 
 
-type Plant = z.infer<typeof PlantSchema>
+export type Plant = z.infer<typeof PlantSchema>
 
-const plant = PlantSchema.parse( {} ) // Exception
-printPlant(plant);
-
-function printPlant(p: Plant) {
-
-}
+// const plant = PlantSchema.parse( {} ) // Exception
+// printPlant(plant);
+//
+// function printPlant(p: Plant) {
+//
+// }
 
 
 // zod

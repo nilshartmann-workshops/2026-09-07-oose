@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 
-import {produce} from "immer"
+import { produce } from "immer";
 
 import { getDaysUntilWatering } from "../shared/date-utils.ts";
 import { useState } from "react";
@@ -17,7 +17,7 @@ type PlantCardProps = {
 type Person = {
   firstname: string;
   lastname: string;
-}
+};
 
 type PersonMitAdresse = {
   firstname: string;
@@ -25,11 +25,11 @@ type PersonMitAdresse = {
   address: {
     plz: string;
     city: string;
+  };
+};
 
-  }
-}
-
-import { useShallow} from "zustand/react/shallow"
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { getPlantsQueryOptions } from "./plant-queries.ts";
 
 export default function PlantCard({
   id,
@@ -38,9 +38,67 @@ export default function PlantCard({
   wateringInterval,
   lastWatered,
 }: PlantCardProps) {
+  const queryClient = useQueryClient();
 
-  console.log("PlantCard", id, new Date().toLocaleTimeString())
+  const {
+    mutate: markAsWatered,
+    isPending,
+    error,
+  } = useMutation({
+    async mutationFn(lastWatered: string) {
+      const response = await fetch(
+        `http://localhost:7200/api/plants/${id}/lastWatered?slow=2000`,
+        {
+          method: "PUT",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ lastWatered }),
+        },
+      );
 
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+      },
+    onMutate(lastWatered) {
+      // const previousPlants = queryClient.getQueryData(
+      //   getPlantsQueryOptions().queryKey,
+      // );
+
+      queryClient.setQueryData(getPlantsQueryOptions().queryKey, (plants) => {
+        return plants?.map((p) => (p.id === id ? { ...p, lastWatered } : p));
+      });
+    },
+
+    onSuccess(_data, lastWatered) {
+      queryClient.setQueryData(
+        getPlantsQueryOptions().queryKey,
+        (currentValueFromCache) => {
+          const newCacheValue = produce(currentValueFromCache, (draft) => {
+            if (!draft) {
+              return;
+            }
+
+            const plantInCache = draft.find((p) => p.id === id);
+
+            if (plantInCache) {
+              plantInCache.lastWatered = lastWatered;
+            }
+
+            // alternativ:
+            // index von Pflanze finden,
+            // dann newCacheValue[ix] = data;
+
+          });
+          return newCacheValue;
+        },
+      );
+
+      // Variante 2: neu laden
+      // queryClient.invalidateQueries({queryKey: getPlantsQueryOptions().queryKey})
+    },
+  });
+
+  // console.log("PlantCard", id, new Date().toLocaleTimeString())
 
   // const x = useFavoriteStore(
   //   // Selektor-Funktion
@@ -59,16 +117,14 @@ export default function PlantCard({
   // )
   const toggleFav = useFavoriteStore(
     // Selektor-Funktion
-    store => store.toggleFavorite,
-
-  )
+    (store) => store.toggleFavorite,
+  );
   // const store = useFavoriteStore();
 
   const isFavorite = useFavoriteStore(
     // Selektor-Funktion
-    selectIsFavorite(id)
-  )
-
+    selectIsFavorite(id),
+  );
 
   // const [person, setPerson ] = useState<PersonMitAdresse>({firstname: "...", lastname: "..."});
   //
@@ -108,8 +164,6 @@ export default function PlantCard({
   //
   // }
 
-
-
   const wateringInfo =
     wateringInterval === 1
       ? "Jeden Tag gießen!"
@@ -147,9 +201,13 @@ export default function PlantCard({
         {wateringMsg}
       </section>
       <button onClick={() => toggleFav(id)}>
+        {isFavorite ? "Favorite entfernen" : "Favorit hinzufügen"}
+      </button>
 
-        { isFavorite ? "Favorite entfernen" : "Favorit hinzufügen" }
-
+      <button type={"button"}
+              disabled={isPending}
+              onClick={() => markAsWatered(dayjs().format("YYYY-MM-DD"))}>
+        {isPending ? "Wird gegossen" : "💧 Jetzt gegossen"}
       </button>
     </div>
   );

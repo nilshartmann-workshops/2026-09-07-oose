@@ -15,7 +15,7 @@ export const createQueryClient = () => {
         // Der Default sind drei Versuche mit wachsender Pause dazwischen. Ein
         // Fehler wäre damit erst nach mehreren Sekunden zu sehen, und beim
         // Lernen will man ihn sofort sehen.
-        retry: false,
+        retry: 3,
       },
     },
   });

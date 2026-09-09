@@ -1,10 +1,18 @@
-import { Plant } from "../types.ts";
+import { Plant, PlantSchema } from "../types.ts";
 import PlantCard from "./PlantCard.tsx";
+import FavoritePlantList from "./FavoritePlantList.tsx";
+import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
+import { getPlantsQueryOptions } from "./plant-queries.ts";
 
 type PlantCardListProps = {
-  plants: Plant[];
+  plants?: Plant[];
 };
-export default function PlantCardList({ plants }: PlantCardListProps) {
+export default function PlantCardList() {
+
+  const result = useSuspenseQuery(getPlantsQueryOptions());
+
+  const plants = result.data;
+
   return (
     <div className={"PlantCardList"}>
       {plants.map((p) => (

@@ -17,7 +17,7 @@ export default function App() {
 
   return (
     <div className={"AppContainer"}>
-      <TabBar initialTabId={"list"}>
+      <TabBar initialTabId={"form"}>
         <Tab tabId={"meldungen"}>Effekt Event</Tab>
         <Tab tabId={"effekt"}>Effekt Beispiel</Tab>
 

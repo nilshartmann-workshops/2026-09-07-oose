@@ -7,7 +7,7 @@ import unusedImports from "eslint-plugin-unused-imports";
 
 // During the workshop this can be set to "false" in order to not
 // get annoying messages due to import statements in wrong order
-const enableImportRules = true;
+const enableImportRules = false;
 
 const importRules = enableImportRules
   ? {
